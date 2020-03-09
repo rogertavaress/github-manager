@@ -26,12 +26,5 @@ module.exports = {
         'import/prefer-default-export': 'off',
         'react/no-unused-state': 'warn',
         'react/state-in-constructor': ['warn', 'never'],
-        'jsx-a11y/anchor-is-valid': [
-            'warn',
-            {
-                components: ['Link'],
-                aspects: ['noHref'],
-            },
-        ],
     },
 };
