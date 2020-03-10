@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 
-import { Loading, Owner, IssueList } from './styles';
+import { Loading, Owner, IssueList, IssueTypesButtons } from './styles';
 import Container from '../../components/Container/index';
 
 export default class Repository extends Component {
@@ -44,6 +44,26 @@ export default class Repository extends Component {
         });
     }
 
+    changeIssuesList = async value => {
+        this.setState({
+            loading: true,
+        });
+
+        const { repository } = this.state;
+
+        const issues = await api.get(`/repos/${repository.full_name}/issues`, {
+            params: {
+                state: value,
+                per_page: 5,
+            },
+        });
+
+        this.setState({
+            loading: false,
+            issues: issues.data,
+        });
+    };
+
     render() {
         const { loading, repository, issues } = this.state;
 
@@ -62,7 +82,26 @@ export default class Repository extends Component {
                     <h1>{repository.name}</h1>
                     <p>{repository.description}</p>
                 </Owner>
-
+                <IssueTypesButtons>
+                    <button
+                        type="button"
+                        onClick={() => this.changeIssuesList('all')}
+                    >
+                        Todas
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => this.changeIssuesList('open')}
+                    >
+                        Abertas
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => this.changeIssuesList('closed')}
+                    >
+                        Fechadas
+                    </button>
+                </IssueTypesButtons>
                 <IssueList>
                     {issues.map(issue => (
                         <li key={String(issue.id)}>
