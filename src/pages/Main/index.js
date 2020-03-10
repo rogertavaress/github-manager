@@ -52,6 +52,12 @@ export default class Main extends Component {
                 name: response.data.full_name,
             };
 
+            repositories.forEach(repository => {
+                if (repository.name === data.name) {
+                    throw new Error('Repositório duplicado');
+                }
+            });
+
             this.setState({
                 repositories: [...repositories, data],
                 newRepo: '',
