@@ -26,5 +26,6 @@ module.exports = {
         'import/prefer-default-export': 'off',
         'react/no-unused-state': 'warn',
         'react/state-in-constructor': ['warn', 'never'],
+        'react/static-property-placement': 'off',
     },
 };
