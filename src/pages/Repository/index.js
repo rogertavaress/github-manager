@@ -4,7 +4,13 @@ import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 
-import { Loading, Owner, IssueList, IssueTypesButtons } from './styles';
+import {
+    Loading,
+    Owner,
+    IssueList,
+    IssueTypesButtons,
+    PaginationButtons,
+} from './styles';
 import Container from '../../components/Container/index';
 
 export default class Repository extends Component {
@@ -20,10 +26,14 @@ export default class Repository extends Component {
         repository: {},
         issues: [],
         loading: true,
+        issuesPage: 1,
+        issuesStatus: 'open',
     };
 
     async componentDidMount() {
         const { match } = this.props;
+
+        const { issuesPage, issuesStatus } = this.state;
 
         const repoName = decodeURIComponent(match.params.repository);
 
@@ -31,8 +41,9 @@ export default class Repository extends Component {
             await api.get(`/repos/${repoName}`),
             await api.get(`/repos/${repoName}/issues`, {
                 params: {
-                    state: 'open',
+                    state: issuesStatus,
                     per_page: 5,
+                    page: issuesPage,
                 },
             }),
         ]);
@@ -47,25 +58,56 @@ export default class Repository extends Component {
     changeIssuesList = async value => {
         this.setState({
             loading: true,
+            issuesStatus: value,
         });
 
-        const { repository } = this.state;
+        this.atualizarPage();
+
+        this.setState({
+            loading: false,
+        });
+    };
+
+    changePage = async page => {
+        const { issuesPage } = this.state;
+
+        let pagina = issuesPage;
+
+        if (page === 'anterior') {
+            pagina -= 1;
+        } else if (page === 'próximo') {
+            pagina += 1;
+        }
+
+        if (pagina < 1) {
+            pagina = 1;
+        }
+
+        await this.setState({
+            issuesPage: pagina,
+        });
+
+        this.atualizarPage();
+    };
+
+    atualizarPage = async () => {
+        const { repository, issuesStatus, issuesPage } = this.state;
 
         const issues = await api.get(`/repos/${repository.full_name}/issues`, {
             params: {
-                state: value,
+                state: issuesStatus,
                 per_page: 5,
+                page: issuesPage,
             },
         });
 
         this.setState({
-            loading: false,
             issues: issues.data,
         });
     };
 
     render() {
-        const { loading, repository, issues } = this.state;
+        const { loading, repository, issues, issuesPage } = this.state;
 
         if (loading) {
             return <Loading>Carregando</Loading>;
@@ -123,6 +165,21 @@ export default class Repository extends Component {
                         </li>
                     ))}
                 </IssueList>
+                <PaginationButtons>
+                    <button
+                        type="button"
+                        onClick={() => this.changePage('anterior')}
+                        page={issuesPage}
+                    >
+                        Anterior
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => this.changePage('próximo')}
+                    >
+                        Próximo
+                    </button>
+                </PaginationButtons>
             </Container>
         );
     }

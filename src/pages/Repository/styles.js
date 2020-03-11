@@ -116,3 +116,18 @@ export const IssueTypesButtons = styled.div`
         border-radius: 15px;
     }
 `;
+
+export const PaginationButtons = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+
+    button {
+        color: #fff;
+        background-color: #7195c1;
+        border: 1px solid #eee;
+        padding: 5px 10px;
+        border-radius: 15px;
+    }
+`;
