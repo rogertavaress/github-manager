@@ -110,8 +110,8 @@ export const IssueTypesButtons = styled.div`
 
     button {
         color: #fff;
-        background-color: #7195c1;
-        border: 1px solid #eee;
+        background-color: #7159c1;
+        border: 2px solid #eee;
         padding: 5px 10px;
         border-radius: 15px;
     }
@@ -125,9 +125,16 @@ export const PaginationButtons = styled.div`
 
     button {
         color: #fff;
-        background-color: #7195c1;
-        border: 1px solid #eee;
+        background-color: #7159c1;
+        border: 2px solid #eee;
         padding: 5px 10px;
         border-radius: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button:disabled {
+        background-color: #938ab2;
     }
 `;

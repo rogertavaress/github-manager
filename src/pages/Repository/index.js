@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+
 import api from '../../services/api';
 
 import {
@@ -170,14 +172,15 @@ export default class Repository extends Component {
                         type="button"
                         onClick={() => this.changePage('anterior')}
                         page={issuesPage}
+                        disabled={issuesPage <= 1}
                     >
-                        Anterior
+                        <FaArrowLeft /> Anterior
                     </button>
                     <button
                         type="button"
                         onClick={() => this.changePage('próximo')}
                     >
-                        Próximo
+                        Próximo <FaArrowRight />
                     </button>
                 </PaginationButtons>
             </Container>
